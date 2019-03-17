@@ -5,7 +5,6 @@ Author:Wen
 """
 # 题目要求很简单，输入n个数，能自动打印出全排列（Permutation）。比如输入1，2，3，那它的全排列就是123，132，213，231，312，321。
 rawInput = input("请输入n个数，逗号间隔")
-# lstNums = list(map(lambda x:int(x),rawInput.split(',')))
 lstNums = rawInput.split(',')
 
 ls = []
@@ -27,11 +26,17 @@ ls = []
 原文：https://blog.csdn.net/zhoufen12345/article/details/53560099 
 版权声明：本文为博主原创文章，转载请附上博文链接！
 '''
-def permutation(lst):
-    for i in range(len(lst)):
-        lst[1],lst[-1] = lst[-1],lst[1]
-        
+def permutation(lst,start,end):
+    for i in range(start,end):
+        lst[start],lst[i] = lst[i],lst(start)
+        # ls.append(''.join(lst))
+        permutation(lst,start+1,end)
+        # lst[start],lst[i] = lst[i],lst(start)
+
+
+permutation(lstNums,0,len(lstNums))  
 '''
+# 我这里之所以，递归陷入了死循环，就是因为递归的参数（循环的次数）我无法传递进下一次的递归，因为我把它的计算写在了函数内，而不是当做参数传递的
 def permutation(lst):
     length = len(lst)
     ls.append(''.join(lst))
@@ -51,4 +56,3 @@ def permutation(lst):
             lst[i],lst[j] = lst[j],lst[i]
             print(lst)
 '''
-permutation(lstNums)
