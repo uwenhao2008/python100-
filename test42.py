@@ -14,4 +14,5 @@ def autofunc():
 for i in range(3):
     print('The num = %d' % num)
     num += 1
+    print("for循环里的num是%s"%num)
     autofunc()
