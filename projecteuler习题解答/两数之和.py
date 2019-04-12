@@ -18,26 +18,25 @@ https://leetcode-cn.com/problems/two-sum/
 '''
 class Solution:
     def twoSum(self, nums,target):
-        ls = []
-        sumidx = []
+        idxls = []
         for i in range(len(nums)):
-            if nums[i] >= target:
-                continue
-            else:
-                ls.append(nums[i])
-        for i in range(len(ls)):
-            # 这里要变为列表的拷贝，而不能是地址的引用 
-            templs = ls[:]
-            subtractor_a = ls[i]
-            templs.pop(i)
+            subtractor_a = nums[i]
             subtractor_b = target - subtractor_a
-            if templs.count(subtractor_b) > 0:
-                sumidx.append(nums.index(subtractor_a))
-                sumidx.append(nums.index(subtractor_b))
+            if subtractor_a != subtractor_b:
+                if nums.count(subtractor_b)>0:
+                    idxls.append(nums.index(subtractor_a))
+                    idxls.append(nums.index(subtractor_b))
+            else:
+                idxls.append(i)  
+                for j in range(i+1,len(nums)-i):
+                    if subtractor_a == nums[j]:
+                        idxls.append(j)
+                    break
                 break
-        print(sumidx)
-        return sumidx
+        print(idxls)
+        return idxls
 
 numlst = Solution()
+# numlst = numlst.twoSum([2,5,5,11],10)
 numlst = numlst.twoSum([3,2,4],6)
 
