@@ -16,27 +16,51 @@ https://leetcode-cn.com/problems/two-sum/
 
 新语法解释参见  https://blog.csdn.net/sunt2018/article/details/83022493
 '''
+
+'''
 class Solution:
     def twoSum(self, nums,target):
         idxls = []
-        for i in range(len(nums)):
+        istart = 0
+        length = len(nums)
+        for i in range(length):
             subtractor_a = nums[i]
             subtractor_b = target - subtractor_a
-            if subtractor_a != subtractor_b:
-                if nums.count(subtractor_b)>0:
-                    idxls.append(nums.index(subtractor_a))
-                    idxls.append(nums.index(subtractor_b))
-            else:
-                idxls.append(i)  
-                for j in range(i+1,len(nums)-i):
-                    if subtractor_a == nums[j]:
-                        idxls.append(j)
-                    break
-                break
+            for istart in range(1+i,length):
+                if nums[istart] == subtractor_b:
+                    idxls.append(i)
+                    idxls.append(istart)
         print(idxls)
         return idxls
 
 numlst = Solution()
 # numlst = numlst.twoSum([2,5,5,11],10)
 numlst = numlst.twoSum([3,2,4],6)
+# numlst = numlst.twoSum([3,2,3],6)
+'''
 
+# 通过hash表来解决，即python的字典
+class Solution:
+    def twoSum(self, nums,target):
+        ls = []
+        for idx,item in enumerate(nums):
+            ls.append([])
+            ls[idx].append(idx)
+            ls[idx].append(item)
+        hashmap = dict(ls)
+        templist = list(hashmap.keys())
+        # i为字典对应的key
+        tempId = []
+        for i in templist:
+            tempdict = hashmap.copy()
+            subtractor_a = hashmap.get(i)
+            subtractor_b = target - subtractor_a
+            del tempdict[i]
+            if subtractor_b in tempdict.values():
+                tempId.append(i)
+        print(tempId)
+
+
+
+numlst = Solution()
+numlst = numlst.twoSum([3,2,3,5,5,7,7],14)
