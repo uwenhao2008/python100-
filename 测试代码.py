@@ -74,17 +74,77 @@ tip-->兴趣是最好的老师<--
 # print( k | {'x', 'y'})
 # print("^--^",k & {'x'})   # 因为交集为空，所以猜得到set()的
 
-# 字典copy()
-d = {"name":"nico", "age":23}
-d1 = d.copy()
-print(d1)
-d['sex'] = 'male'
-d2 = d1.items()
-print('-->',d2)
-print('d',d)
-print('d1',d1)
-# 有key为name
-print(d.pop('name','Wen'))
-# 没有key为names
-print(d.pop('names','Wen'))
+# # 字典copy()
+# d = {"name":"nico", "age":23}
+# d1 = d.copy()
+# print(d1)
+# d['sex'] = 'male'
+# d2 = d1.items()
+# print('-->',d2)
+# print('d',d)
+# print('d1',d1)
+# # 有key为name
+# print(d.pop('name','Wen'))
+# # 没有key为names
+# print(d.pop('names','Wen'))
+
+# lists = [[]] * 3
+# print(lists)
+# lists[0].append(3)
+# print(lists)
+# # 注意和上面的区分
+# lists1 = [[],[],[]]
+# print(lists1)
+# lists1[0].append(3)
+# print(lists1)
+
+# ls = [1,2,3,4,5,6,7,8,9]
+# for i in range(len(ls)):
+#     temp = ls[:]
+#     print(temp.pop(i))  # 这里返回的是pop的值
+#     print(temp) # 列表其实改变了 
+
+# ls = ls = [1,2,3,4,5,6,7,8,9]
+# ls.remove(5)
+# print(ls)
+
+# nums = [1,2,3,4,5,6]
+# for i in range(len(nums)):
+#     ls = nums[:]
+#     print(ls)
+
+# # 列表的拷贝  
+# ls = [1,2,3,4,5,6]
+# ls_temp = ls[:]
+# print('ls id is',id(ls))
+# print('ls_temp is',ls_temp)
+# for i in ls_temp:
+#     print(i)
+#     if i == 2:
+#         ls_temp.remove(i)
+#     if i == 3:
+#         ls_temp.remove(i)
+# print('ls_temp is',ls_temp)
+# print('ls is',ls)
+# print('ls_temp id is',id(ls_temp))
+
+
+#  遍历list中，删除指定项有两种或方法，解决list异常跳过的问题 1.遍历拷贝的list，操作原始list  2.倒序遍历 range(len(ls)-1,-1,-1)\
+"""
+---------这页可能也就下面的对自己有大帮助吧
+"""
+# num_list = [1, 2, 3, 4, 5]
+# print(id(num_list))
+# print(id(num_list[:]))
+# for item in num_list[:]:
+#     if item == 2:
+#         num_list.remove(item)
+#     else:
+#         print(item)
+# print(num_list)
+
+# ls = [1,2,3,4,5,6,7]
+# # 反向 步长为2的循环
+# for i in range(len(ls)-1,0,-2):
+#     print(i)
 
