@@ -26,7 +26,7 @@ class ChineseToNumb():
         unitPos = 0
         numValue = 0
         tempString = ''
-        while(unitPos < len(chnString)):
+        while(unitPos <= len(chnString)):
             if unitPos == len(chnString):
                 numValue = numValue + self.chineseToValue(tempString)
                 return numValue
@@ -47,11 +47,15 @@ class ChineseToNumb():
         tempValue = ''
         for i in chnString:
             if self.isNum(i):
-                tempValue = ''
-                # 这里也需要权重，否则处理不了4500这种数据，会当作45处理
-                tempValue = tempValue + str(self.chnDictNum[i])
+                # 应对chnString 为  一亿 和 陆仟伍佰零叁的尾数 这种特殊情况             
+                if len(chnString)==1 or chnString[-1]==i:
+                    tempNum = tempNum + self.chnDictNum[i] 
+                else:
+                    # 这里也需要权重，否则处理不了4500这种数据，会当作45处理
+                    tempValue = tempValue + str(self.chnDictNum[i])
             else:
-                tempNum = tempNum + int(tempValue)*self.chnUnitSection[i]['mul']*10 
+                tempNum = tempNum + int(tempValue)*self.chnUnitSection[i]['mul']*10
+                tempValue = '' 
         return int(tempNum)
 
     # 判断是数字  还是权 数字返回True
@@ -62,7 +66,8 @@ class ChineseToNumb():
             return False
 
 # strNum = '陆拾叁'
-strNum = '壹亿肆仟伍佰万陆仟伍佰捌拾柒'
+# strNum = '壹亿肆仟伍佰万陆仟伍佰捌拾柒'
+strNum = '叁亿伍仟零壹拾肆万捌仟玖佰陆拾贰'
 trs = ChineseToNumb()
 print(trs.chnToNum(strNum))
 
