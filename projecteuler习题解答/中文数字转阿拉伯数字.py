@@ -26,15 +26,16 @@ class ChineseToNumb():
         unitPos = 0
         numValue = 0
         tempString = ''
-        while(unitPos <= len(chnString)):
-            if unitPos >= len(chnString):
+        while(unitPos < len(chnString)):
+            if unitPos == len(chnString):
                 numValue = numValue + self.chineseToValue(tempString)
                 return numValue
             # 判断当前 为 权位(不包括 拾，佰，仟)
             if chnString[unitPos] in self.chnUnitSection and self.chnUnitSection[chnString[unitPos]]['unitSection'] == 1:
-                # 权位 为 万，亿，万亿
+                # 权位 为 万，亿，万亿  这里其实少了一个判断  万 与 万亿的区别！
                 times = self.chnUnitSection[chnString[unitPos]]['mul']*10
-                numValue = numValue + self.chineseToValue(tempString)*times
+                p = self.chineseToValue(tempString)
+                numValue = numValue + p*times
                 tempString = ''
             else:
                 tempString = tempString + chnString[unitPos]
@@ -42,16 +43,19 @@ class ChineseToNumb():
 
     # 节中的汉字数字转换为num   壹佰肆拾 = 1*100+4*10 
     def chineseToValue(self,chnString):
+        tempNum = 0
         tempValue = ''
         for i in chnString:
-            if i in self.chnDictNum:
+            if self.isNum(i):
+                tempValue = ''
                 # 这里也需要权重，否则处理不了4500这种数据，会当作45处理
-                pass
-                # tempValue = tempValue + str(self.chnDictNum[i])  
-        return int(tempValue)
+                tempValue = tempValue + str(self.chnDictNum[i])
+            else:
+                tempNum = tempNum + int(tempValue)*self.chnUnitSection[i]['mul']*10 
+        return int(tempNum)
 
     # 判断是数字  还是权 数字返回True
-    def numOrSec(self,chnString):
+    def isNum(self,chnString):
         if chnString in self.chnDictNum:
             return True
         else:
