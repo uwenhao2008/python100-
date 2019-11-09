@@ -43,7 +43,8 @@ def next_state_lawful(current_state,bucket_volume):
             # 下一步to_水桶的水量 = 当前to_水桶的水量 + 当前from_水桶的水量
             next_state[to_] = current_state[to_] + current_state[from_]
 
-        #再由所有可能的合法动作得出所有的下一个状态，通过yield产生供其它函数调用。
+        #再由所有可能的合法动作得出所有的下一个状态，通过yield产生供其它函数调用。 
+        # 这里的yield在for循环里，所以才可以遍历~~~~~~~~~~
         yield next_state
 
 num = 0
@@ -80,3 +81,4 @@ def searchResult(record, bucket_volume, final_bucket_state):
 
 searchResult(record, bucket_volume=[3,5,8], final_bucket_state=[0,4,4])
 print("一共有%s种方法"%num)
+# print(record_list)
