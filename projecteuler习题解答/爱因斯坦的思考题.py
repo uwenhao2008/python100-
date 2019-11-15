@@ -141,7 +141,8 @@ class StructItem():
         if groupIdx == self.GROUPS_COUNT:
             self.ArrangePeopleDrinks(groups)
             return
-        # 因为NATION_NORWAY 住0号房子，所以这里从0 开始，所以下面是range(5)
+        # 因为NATION_NORWAY 住0号房子，所以这里从0 开始，所以下面是range(5)  i代表的是 type_nation阔或的种类，因为这里包括了5个国籍，
+        # 和条件4.绿房子紧挨着白房子 最大的区别是 条件4暗示了绿房子不可能是最后一间
         for i in range(5):
             if not self.IsGroupItemValueUsed()
 
