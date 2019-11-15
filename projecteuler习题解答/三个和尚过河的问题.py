@@ -14,6 +14,8 @@ https://blog.csdn.net/sunny1235435/article/details/95733370
 自己实现了，花了三天时间，其实调试错误花费的时间最多，尤其是searchReault()函数最后的pop最为经典，能否进行深度遍历就看他了
 还有就是自己一开始的record定义哪里花费了很多时间  想实现[[1],[2],[3]] 但是总得到的是[[1,2,3]]  这个地方看看不适用deque只是使用数组能否实现
 record = initial  和 record = list(initial)  之间的差别
+
+https://blog.csdn.net/sunny1235435/article/details/95733370
 """
 from collections import deque
 # [左岸和尚，左岸妖怪，右岸和尚，右岸妖怪，小船位置REMOTE或LOCAL] 来表示状态
@@ -52,6 +54,14 @@ def QS_next_state(current_state,action_effect):
             next_state = []
             # state:[左岸和尚，左岸妖怪，右岸和尚，右岸妖怪，小船位置REMOTE或LOCAL]
             # action:[过河动作，小船走向，左岸和尚变化数量，左岸妖怪变化数量]
+
+            # -------可采用如下方法，让函数表达更美观
+            # left_monk = current_state[0] + state[0]
+            # left_monster = current_state[1] + state[1]
+            # right_monk = current_state[2] - state[0]
+            # right_monster = current_state[3] - state[1]
+            # next_state = list(current_state)
+
             # next_state左岸的和尚
             next_state.append(current_state[0] + action[2])
             # next_state左岸的妖怪
