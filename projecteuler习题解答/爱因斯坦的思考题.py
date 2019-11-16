@@ -64,7 +64,7 @@ class StructItem():
                 [type_nation,NATION_NORWAY,type_house,COLOR_BLUE],[type_cigaret,CIGARET_BLENDS,type_drink,DRINK_WATER]]
 
     def __init__(self):    
-        pass
+        self.Struct_relation(self.relations)
 
     # 创建关系绑定类    线索 10，11，14，15
     class RELATION():
@@ -97,8 +97,9 @@ class StructItem():
         return self.ITEM_TYPE()
 
 
-    # 创建relation 结构体    终于搞出来了！！！
-    def Struct_relation(self,relations):
+    # 创建relation 结构体    终于搞出来了！！！ 
+    # @classmethod
+    def Struct_relation(self,relations = relations):    # 我这里调用 类变量，其实不需要 self.relations就可以调用到~~~
         relations_list = []
         for i in range(len(relations)):
             type = relations[i][0]
@@ -111,11 +112,11 @@ class StructItem():
 
     def Struct_bind(self,tagBinds):
         tagBinds_list = []
-        for i in range(len(self.tagBinds)):
-            first_type = self.tagBinds[i][0]
-            first_val = self.tagBinds[i][1]
-            second_type = self.tagBinds[i][2]
-            second_val = self.tagBinds[i][3]
+        for i in range(len(tagBinds)):
+            first_type = tagBinds[i][0]
+            first_val = tagBinds[i][1]
+            second_type = tagBinds[i][2]
+            second_val = tagBinds[i][3]
             tagBinds_list.append(self.BIND(first_type,first_val,second_type,second_val))
         return tagBinds_list
 
@@ -125,16 +126,68 @@ class StructItem():
         return GROUP.type
 
     # 通过group数据type类型的val，找到对应的GroupId
-    # 解决类似于 知道 绿房子的主人喝咖啡，判断这个方式是不是三号房  之类的问题
+    # 解决类似于 知道 绿房子的主人喝咖啡，判断这个方式是不是三号房  之类的问题，我这里的理解不对
     def FindGroupIdxByItem(self,GROUP,type,value):
         for i in range(self.GROUPS_COUNT):
             if self.GetGroupItemValue(GROUP[i],type) == value:
                 return i
         return False
 
-    def ArrangePeopleDrinks(self,groups):
+    def CheckAllGroupsBind(self,groups, binds):
         pass
 
+    def CheckAllGroupsRelation(self,groups, relations):
+        pass
+
+    # def PrintAllGroupsResult(self,groups, self.GROUPS_COUNT):   # 为什么这么写 def前面会出现红色波浪？因为函数定义的时候，不能直接写为 def func(1,2),但是可以写为func(a=1,b=2)，给定一个默认的初始值
+    def PrintAllGroupsResult(self,groups, GROUPS_COUNT):
+        pass
+
+    cnt = 0
+    def DoGroupFinalCheck(self,groups):
+        self.cnt += 1
+        if self.cnt%10000000 == 0:
+            print(self.cnt)   # 运行100万次输出依次提示
+
+        binds = self.tagBinds
+        relations = self.relations
+        if self.CheckAllGroupsBind(groups, binds) and self.CheckAllGroupsRelation(groups, relations):
+            self.PrintAllGroupsResult(groups, self.GROUPS_COUNT)
+
+    def EnumPeopleCigarets(self,groups,groupIdx):
+        if groupIdx == self.GROUPS_COUNT:
+            self.DoGroupFinalCheck(groups)
+            return
+        for i in range(4):   # i代表 type_cigaret
+            if not self.IsGroupItemValueUsed(groups,groupIdx,self.type_pet,i):
+                groups[i].type_cigaret = i
+                self.EnumPeopleCigarets(groups,groupIdx+1)
+
+    def ArrangePeopleCigaret(self,groups):
+        self.EnumPeopleCigarets(groups,0)
+
+    def EnumPeoplePets(self,groups,groupIdx):
+        if groupIdx == self.GROUPS_COUNT:
+            self.ArrangePeopleCigaret(groups)
+            return
+        for i in range(5):   # i代表 type_pet
+            if not self.IsGroupItemValueUsed(groups,groupIdx,self.type_pet,i):
+                groups[groupIdx].type_pet = i
+                self.EnumPeoplePets(groups,groupIdx+1)
+
+    # 10.抽Blends牌香烟的人和养猫的人相邻   这个条件不能用在这里就是因为不明确，不像别的条件指定 第一件房子的人国籍是挪威，中间房子人喝牛奶
+    def ArrangePeoplePet(self,groups):
+        self.EnumPeoplePets(groups,0)
+
+    # # 8.住在中间那个房子里的人喝牛奶
+    def EnumPeopleDrink(self,groups,groupIdx):
+        if groupIdx == self.GROUPS_COUNT:
+            if groups[2].type_drink == self.DRINK_MILK:
+                self.ArrangePeoplePet(groups)
+        return
+
+    def ArrangePeopleDrinks(self,groups):
+        self.EnumPeopleDrink(groups,0)
 
     # 这里之所以没有用 for循环0,1,2,3,4就是因为通过第一个房子住的挪威人进行了减枝操作的缘故，我这里的groupIdx 直接从1开始计数的，因为我传入的是1
     def EnumHouseNations(self,groups,groupIdx):
@@ -142,9 +195,11 @@ class StructItem():
             self.ArrangePeopleDrinks(groups)
             return
         # 因为NATION_NORWAY 住0号房子，所以这里从0 开始，所以下面是range(5)  i代表的是 type_nation阔或的种类，因为这里包括了5个国籍，
-        # 和条件4.绿房子紧挨着白房子 最大的区别是 条件4暗示了绿房子不可能是最后一间
+        # 和条件4.绿房子紧挨着白房子，在白房子的左边  最大的区别是 条件4暗示了绿房子不可能是最后一间
         for i in range(5):
-            if not self.IsGroupItemValueUsed()
+            if not self.IsGroupItemValueUsed(groups, groupIdx, self.type_nation, i):
+                groups[groupIdx].type_nation = i
+                self.EnumHouseNations(groups,groupIdx+1)
 
     # 9.挪威人住第一个房子里面
     def ArrangeHouseNations(self,groups):
@@ -191,9 +246,10 @@ class StructItem():
 
 
 gpitem = StructItem()
-relations = gpitem.Struct_relation(gpitem.relations)
-tagbinds = gpitem.Struct_bind(gpitem.tagBinds)
-gpitem.main()
+relations = gpitem.Struct_relation()
+print(relations[0].relation_type)
+# tagbinds = gpitem.Struct_bind()
+# gpitem.main()
 
 
 
